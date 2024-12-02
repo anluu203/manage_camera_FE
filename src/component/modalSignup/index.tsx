@@ -23,39 +23,41 @@ function ModalSignUp() {
         isValidConfirm: true
     }
     const [checkValid, setCheckValid] = useState(defaultValue)
-
+    const [checkError, setCheckError] = useState(false)
 
     const validateData = ():boolean =>{
 
       setCheckValid(defaultValue)
-      if (!confirm) {
-          toast.error('Confirm password is required !')
-          setCheckValid({...defaultValue, isValidConfirm:false})
-          return false
-      }
+
       if (confirm !== password) {
           toast.error('Confirm password and password do not match')
           setCheckValid({...defaultValue, isValidConfirm:false})
+          setCheckError(true)
           return false
       }
       return true
   }
 
   const handleRegister = async () => {
-    let res = await handleSignUp(email, phone, userName, password )
-    let validate = res.data;
-    if (+validate.EC === 0) {
-      toast.success(validate.EM)
-      setEmail('');
-      setPhone('');
-      setUserName('');
-      setPassWord('');
-      setConfirm('');
-      navigate("/login"); 
-    } else {
-      toast.error(validate.EM)
+    let check = validateData()
+    if (checkValid){
+      if (check === true) {
+        let res = await handleSignUp(email, phone, userName, password )
+        let validate = res.data;
+        if (+validate.EC === 0) {
+          toast.success(validate.EM)
+          setEmail('');
+          setPhone('');
+          setUserName('');
+          setPassWord('');
+          setConfirm('');
+          navigate("/login"); 
+        } else {
+          toast.error(validate.EM)
+          setCheckError(true)
+        }
+      }
     }
-
   }
     
     return(
@@ -73,6 +75,7 @@ function ModalSignUp() {
               <div className="relative flex items-center">
                 <InputCustom
                   label="Email address"
+                  error={checkError}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="text"
@@ -84,6 +87,7 @@ function ModalSignUp() {
               <div className="relative flex items-center">
                 <InputCustom
                   label="Phone number"
+                  error={checkError}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   type="text"
@@ -95,6 +99,7 @@ function ModalSignUp() {
               <div className="relative flex items-center">
                 <InputCustom
                   label="User name"
+                  error={checkError}
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   type="text"
@@ -106,6 +111,7 @@ function ModalSignUp() {
               <div className="relative flex items-center">
                 <InputCustom
                   label="Password"
+                  error={checkError}
                   value={password}
                   onChange={(e) => setPassWord(e.target.value)}
                   type="password"
@@ -119,6 +125,7 @@ function ModalSignUp() {
                 <InputCustom
                   label="Confirm Password"
                   value={confirm}
+                  error={checkError}
                   onChange={(e) => setConfirm(e.target.value)}
                   type="password"
                   style={{

@@ -11,6 +11,8 @@ function ModalLogin() {
     let navigate = useNavigate();
     const [valueLogin, setValueLogin] = useState("");
     const [valuePassword, setValuePassword] = useState("");
+    const [checkError, setCheckError] = useState(false)
+
 
     const handleLogin = async () => {
       let res = await handleLoginApi(valueLogin, valuePassword)
@@ -22,10 +24,11 @@ function ModalLogin() {
         navigate("/home")
       } else {
         toast.error(validate.EM)
+        setCheckError(true)
       }
     }
     return(
-        <div className="border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
+        <div className="border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto ">
             <form className="space-y-4">
               <div className="mb-8">
                 <h3 className="text-gray-800 text-3xl font-extrabold">
@@ -41,18 +44,19 @@ function ModalLogin() {
                   label="Email or phone number"
                   type="text"
                   value={valueLogin}
+                  error={checkError}
                   onChange={(e) => setValueLogin(e.target.value)}
                   style={{
                     width: "100%",
                   }}
                 />
               </div>
-
               <div className="relative flex items-center">
                 <InputCustom
                   label="Password"
                   type="password"
                   value={valuePassword}
+                  error={checkError}
                   onChange={(e) => setValuePassword(e.target.value)}
                   style={{
                     width: "100%",

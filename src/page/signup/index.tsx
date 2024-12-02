@@ -5,8 +5,8 @@ function SignUpPage() {
   return (
     <div className="font-[sans-serif]">
       <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
-        <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
-          <ModalSignUp/>
+      <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
+      <ModalSignUp/>
           <div className="lg:h-[400px] md:h-[300px] max-md:mt-8">
             <img
               src={image}

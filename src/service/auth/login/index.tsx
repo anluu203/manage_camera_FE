@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from "@/config/axios"
 
 const handleLoginApi = (
   valueLogin: string | number,
   valuePassword: string | number
 ) => {
-    return axios.post('http://localhost:8080/api/v1/login', {
+    return axios.post('/api/v1/login', {
         valueLogin,
         valuePassword
     }
