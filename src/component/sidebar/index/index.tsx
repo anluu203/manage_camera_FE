@@ -1,16 +1,21 @@
 import { SidebarItem } from "../sidebarItem";
 import SidebarModal from "../sidebarModal";
+import { useAuth } from "@/hooks/useAth";
 import {
   LayoutDashboard,
   Home,
   Layers,
   Flag,
   ContactRound,
-  LifeBuoy,
+  LogOut,
   Settings,
 } from "lucide-react";
 
 export const Sidebar = () => {
+  const {logout} = useAuth()
+  const handleLogout = () => {
+    logout(); // Gọi hàm logout từ context
+  };
   return (
     <>
       <SidebarModal>
@@ -27,7 +32,7 @@ export const Sidebar = () => {
         <SidebarItem icon={<Flag size={20} />} text="Reporting" to="flag"/>
         <hr className="my-3" />
         <SidebarItem icon={<Settings size={20} />} text="Settings" to="settings"/>
-        <SidebarItem icon={<LifeBuoy size={20} />} text="Help" to="help"/>
+        <SidebarItem icon={<LogOut size={20} />} text="Logout" to="" onClick={handleLogout} />
       </SidebarModal>
     </>
   );

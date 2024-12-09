@@ -15,7 +15,7 @@ type Props = {
 const ButtonCustom = forwardRef<HTMLButtonElement, Props>(
   (
     {
-      fontWeight = 400,
+      fontWeight = 500,
       textTransform = 'none',
       theme = 'submit',
       sx,

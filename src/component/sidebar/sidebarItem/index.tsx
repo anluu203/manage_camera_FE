@@ -10,9 +10,10 @@ interface SidebarItemProps {
   to: string; // Đường dẫn liên kết
   active?: boolean;
   alert?: boolean;
+  onClick?: () => void
 }
 
-export function SidebarItem({ icon, text, to, active, alert }: SidebarItemProps) {
+export function SidebarItem({ icon, text, to, active, alert, onClick, ...props }: SidebarItemProps) {
   const context = useContext(SidebarContext);
 
   if (!context) {
@@ -23,6 +24,8 @@ export function SidebarItem({ icon, text, to, active, alert }: SidebarItemProps)
 
   return (
     <NavLink
+      {...props}
+      onClick={onClick}
       to={to}
       className={({ isActive }) =>
         `relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${

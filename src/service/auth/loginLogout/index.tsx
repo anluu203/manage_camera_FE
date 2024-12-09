@@ -11,4 +11,7 @@ const handleLoginApi = (
 )
 };
 
-export default handleLoginApi;
+const handleLogout = () =>{
+  return axios.post('/api/v1/logout')
+}
+export {handleLoginApi, handleLogout} ;

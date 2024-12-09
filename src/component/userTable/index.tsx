@@ -2,17 +2,13 @@
 // UserTable.tsx
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { User } from "@/page/users";
-// import ButtonBase from "../../atoms/button/button";
-// import { handleDeleteUser } from "@/services/userService";
-// import DialogDelete from "../dialogDelete";
-// import DialogCreate from "../dialogCreate";
-interface UserTableProps {
-  listUsers: User[];
-  fetchUsers: () => Promise<void>;
-  currentResults: number
-  currentPage:number
-}
+import { User, UserTableProps } from "@/type";
+import ButtonCustom from "../atoms/button/button";
+import { CirclePlus, Trash, UserPen } from "lucide-react";
+import { handleDeleteUser } from "@/service/usersService";
+import DialogDelete from "../deleteDlg";
+import CreateUpdateDialog from "../createUpdateDlg";
+
 
 const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPage, currentResults }) => {
 
@@ -38,24 +34,24 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
   };
 
 
-  // const handleConfirmDelete  = async () =>{
-  //   let response = await handleDeleteUser(selectedUser)
-  //   if (response.data.EC === 0) {
-  //     toast.success(response.data.EM)
-  //     await fetchUsers()
-  //   }else{
-  //     toast.error(response.data.EM)
-  //     await fetchUsers()
-  //   }
-  //   handleCloseDialogDelete()
-  // }
+  const handleConfirmDelete  = async () =>{
+    let response = await handleDeleteUser(selectedUser)
+    if (response.data.EC === 0) {
+      toast.success(response.data.EM)
+      await fetchUsers()
+    }else{
+      toast.error(response.data.EM)
+      await fetchUsers()
+    }
+    handleCloseDialogDelete()
+  }
 
   const handleOpenDialogCreate = () => {
     setActionDialog('CREATE')
     setDialogCreate(true)
   }
 
-  const handleCloseDialogCreate = () => {
+  const handleCloseCreateUpdateDlg = () => {
     setDialogCreate(false)
     setDataDialog({})
     setDisabled(false)
@@ -72,23 +68,19 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
     setDisabled(true)
   }
   return (
-    <>
-      {/* <div className="list-button mb-3">
-        <ButtonBase
+    <div className="relative  ">
+      <div className="list-button mb-3">
+        <ButtonCustom
           theme="add"
-          style={{marginRight:'1rem'}}
-        >
-          Refresh
-        </ButtonBase>
-
-        <ButtonBase
-          theme="add"
+          fontWeight="600"
           onClick={() => handleOpenDialogCreate()}
         >
+        <CirclePlus size={20} className="me-1"/>  
           Add new user
-        </ButtonBase>
-      </div> */}
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500  overflow-x-auto shadow-md sm:rounded-lg">
+        </ButtonCustom>
+      </div>
+    <div className="">
+    <table className="w-full min-w-[600px] text-sm text-left rtl:text-right text-gray-500 shadow-md sm:rounded-lg">
       <thead className="text-xs text-gray-700 uppercase bg-gray-200 ">
         <tr>
           <th scope="col" className="px-6 py-3">NO</th>
@@ -97,6 +89,7 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
           <th scope="col" className="px-6 py-3">PHONE</th>
           <th scope="col" className="px-6 py-3">EMAIL</th>
           <th scope="col" className="px-6 py-3">GROUP</th>
+          <th scope="col" className="px-6 py-3">DESCRIPTION</th>
           <th scope="col" className="px-6 py-3">ACTION</th>
         </tr>
       </thead>
@@ -112,20 +105,19 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
               <td className="px-6 py-4">{item.phone}</td>
               <td className="px-6 py-4">{item.email}</td>
               <td className="px-6 py-4">{item.group ? item.group.name : ''}</td>
-              <td className="px-6 py-4">
-              {/* <ButtonBase
-                    theme="add"
-                    onClick={() => handleOpenDialogUpdate(item)}
-                >
-                      Edit
-                      </ButtonBase>
-                <ButtonBase
-                    theme="cancel"
-                    style={{marginLeft:'1rem'}}
-                    onClick={() => handleOpenDialogDelete(item)}
-                >
-                    Delete
-                </ButtonBase> */}
+              <td className="px-6 py-4">{item.group ? item.group.description : ''}</td>
+              <td className="px-6 py-4 flex justify-center">
+                <UserPen size={15} 
+                  onClick={() => handleOpenDialogUpdate(item)}
+                  className="me-1"
+                  color={'#2a60b7'}
+                  strokeWidth={2}
+                  />
+                <Trash size={15} 
+                  onClick={() => handleOpenDialogDelete(item)} 
+                  color={'#e43a3a'}
+                  strokeWidth={2}
+                  />
               </td>
             </tr>
           ))
@@ -138,7 +130,8 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
         )}
       </tbody>
     </table>
-    {/* <div className="dialog-delete">
+    </div>
+    <div className="dialog-delete">
         <DialogDelete
           open={openDialogDelete}
           onClose={handleCloseDialogDelete}
@@ -146,16 +139,16 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
         />
     </div>
     <div className="dialog-update">
-        <DialogCreate
+        <CreateUpdateDialog
           open={openDialogCreate}
-          onClose={handleCloseDialogCreate}
+          onClose={handleCloseCreateUpdateDlg}
           onConfirm={handleConfirmCreate}
           actionDialog={actionDialog}
           dataDialog={dataDialog}
           disabled={disabled}
         />
-    </div> */}
-    </>
+    </div> 
+    </div>
   );
 };
 

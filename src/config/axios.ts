@@ -7,11 +7,11 @@ window.onerror = (message, error) => {
 // Set config defaults when creating the instance
 const instance = axios.create({
     baseURL: 'http://localhost:8080',
-    // withCredentials: true, // Đảm bảo cookie được gửi cùng request
+    withCredentials: true, // Đảm bảo cookie được gửi cùng request
   });
   
 // Alter defaults after instance has been created
-// instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("jwt")}`;
 
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {

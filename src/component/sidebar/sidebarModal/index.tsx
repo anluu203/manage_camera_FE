@@ -1,6 +1,7 @@
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { createContext, useState, ReactNode } from "react";
-
+import { useAuth } from "@/hooks/useAth";
+import { Account } from "@/type";
 // Kiểu dữ liệu cho Context
 interface SidebarContextType {
   expanded: boolean;
@@ -24,6 +25,10 @@ function SidebarLayout({
   expanded: boolean;
   toggleSidebar: () => void;
 }) {
+  const {user} = useAuth();
+  let userName = (user.account as Account)?.username;
+  let email = (user.account as Account)?.email;
+<h4 className="font-semibold">{userName}</h4>;
   return (
     <aside className="h-screen ">
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
@@ -45,10 +50,9 @@ function SidebarLayout({
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">constGenius</h4>
-              <span className="text-xs text-gray-600">constgenius@gmail.com</span>
+              <h4 className="font-semibold">{userName}</h4>
+              <span className="text-xs text-gray-600">{email}</span>
             </div>
-            <MoreVertical size={20} />
           </div>
         </div>
       </nav>

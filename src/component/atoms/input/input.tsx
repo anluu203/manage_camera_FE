@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import _ from 'lodash';
-import { PRIMARY, RED, GRAY_SCALE, BACK_GROUND, WHITE } from '@/helper/colors';
+import { PRIMARY, RED, GRAY_SCALE, BACK_GROUND } from '@/helper/colors';
 
 type Props = {
   fontWeight?: string;

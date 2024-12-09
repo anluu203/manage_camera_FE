@@ -2,20 +2,7 @@ import PaginationComponent from "@/component/pagination";
 import UserTable from "@/component/userTable";
 import { useEffect, useState, useCallback } from "react";
 import { handleFetchUsers } from "@/service/usersService";
-
-export interface Group {
-  id?: number;
-  name: string;
-  description: string;
-}
-
-export interface User {
-  id: number;
-  username: string;
-  phone: string;
-  email: string;
-  group?: Group;
-}
+import { User } from "@/type";
 
 const UsersPage = () => {
   const [listUsers, setListUsers] = useState<User[]>([]);
@@ -25,7 +12,6 @@ const UsersPage = () => {
 
   const fetchUsers = useCallback(async () => {
     var response = await handleFetchUsers(currentPage, currentResults);
-    console.log("check res :", response);
     if (response.data.EC === 0) {
       setTotalPages(response.data.DT.totalPages);
       setListUsers(response.data.DT.users);
@@ -44,7 +30,7 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="user-page">
+    <div className="user-page ">
       <h1 className="text-center text-3xl font-bold my-3">User List</h1>
       <UserTable
         listUsers={listUsers}

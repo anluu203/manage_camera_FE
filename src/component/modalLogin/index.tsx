@@ -4,15 +4,18 @@ import ButtonCustom from "@/component/atoms/button/button";
 import InputCustom from "@/component/atoms/input/input";
 import { PRIMARY, WHITE } from "@/helper/colors";
 import { useState } from "react";
-import handleLoginApi from "@/service/auth/login";
+import {handleLoginApi} from "@/service/auth/loginLogout";
 import {toast} from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAth";
 function ModalLogin() {
     let navigate = useNavigate();
     const [valueLogin, setValueLogin] = useState("");
     const [valuePassword, setValuePassword] = useState("");
     const [checkError, setCheckError] = useState(false)
 
+
+    const {loginContext} = useAuth()
 
     const handleLogin = async () => {
       let res = await handleLoginApi(valueLogin, valuePassword)
@@ -21,6 +24,18 @@ function ModalLogin() {
         toast.success(validate.EM)
         setValueLogin("");
         setValuePassword("");
+        let groupWithRoles = validate.DT.groupWithRoles;
+        let email = validate.DT.email;
+        let username = validate.DT.username;
+        let token = validate.DT.access_token;
+        const data = {
+          isAuthenticated: true,
+          token: token,
+          account: {groupWithRoles, email, username},
+          isLoading: false
+        };
+        localStorage.setItem('jwt', token)
+        loginContext(data)
         navigate("/home")
       } else {
         toast.error(validate.EM)
