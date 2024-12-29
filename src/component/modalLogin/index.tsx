@@ -15,7 +15,7 @@ function ModalLogin() {
     const [checkError, setCheckError] = useState(false)
 
 
-    const {loginContext} = useAuth()
+    const {loginContext, user} = useAuth()
 
     const handleLogin = async () => {
       let res = await handleLoginApi(valueLogin, valuePassword)
@@ -35,6 +35,7 @@ function ModalLogin() {
           isLoading: false
         };
         localStorage.setItem('jwt', token)
+        console.log('user after login', user)
         loginContext(data)
         navigate("/home")
       } else {

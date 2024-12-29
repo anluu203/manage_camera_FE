@@ -5,7 +5,7 @@ import {  Route, Routes, Navigate } from "react-router-dom";
 import SignUpPage from "@/page/signup";
 import LoginPage from "@/page/login";
 import HomePage from "@/page/home";
-import ManageRoom from "@/component/admin/ManageRoom";
+import ManageRoom from "@/page/rooms/listRooms";
 import EventChart from "@/component/chart/EventChart";
 import UsersPage from "@/page/users";
 import PrivateRoute from "./privateRoute";

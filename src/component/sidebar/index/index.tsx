@@ -4,8 +4,8 @@ import { useAuth } from "@/hooks/useAth";
 import {
   LayoutDashboard,
   Home,
-  Layers,
-  Flag,
+  BookCopy,
+  Camera,
   ContactRound,
   LogOut,
   Settings,
@@ -27,9 +27,9 @@ export const Sidebar = () => {
           alert={true}
         />
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard"  to="dashboard"/>
-        <SidebarItem icon={<ContactRound size={20} />} text="ListUser" to="users"/>
-        <SidebarItem icon={<Layers size={20} />} text="Tasks" to="tasks"/>
-        <SidebarItem icon={<Flag size={20} />} text="Reporting" to="flag"/>
+        <SidebarItem icon={<ContactRound size={20} />} text="ListUsers" to="users"/>
+        <SidebarItem icon={<BookCopy size={20} />} text="Rooms" to="rooms"/>
+        <SidebarItem icon={<Camera size={20} />} text="CameraCategory" to="cameras"/>
         <hr className="my-3" />
         <SidebarItem icon={<Settings size={20} />} text="Settings" to="settings"/>
         <SidebarItem icon={<LogOut size={20} />} text="Logout" to="" onClick={handleLogout} />

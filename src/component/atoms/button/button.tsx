@@ -1,7 +1,7 @@
 import  { forwardRef } from 'react';
 import { LoadingButton, LoadingButtonProps } from '@mui/lab';
 import _ from 'lodash'
-import { PRIMARY, RED, GRAY_SCALE, BACK_GROUND, WHITE } from '@/helper/colors';
+import { PRIMARY, RED, BACK_GROUND, WHITE } from '@/helper/colors';
 
 type Props = {
   fontWeight?: string;

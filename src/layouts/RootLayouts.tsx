@@ -10,7 +10,7 @@ function RootLayout({ children }:RootLayoutProps) {
     return (
       <div className="flex gap-5">
         {user.isAuthenticated && <Sidebar/>}
-        <main className="max-w-5xl  mx-auto py-4 ">{children}</main>
+        <main className="  mx-auto py-4 ">{children}</main>
       </div>
     );
   }

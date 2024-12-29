@@ -2,7 +2,8 @@ export interface PropDialog{
     open: boolean;
     onClose: () => void;
     onConfirm: () => void;
-    actionDialog:string;
+    actionDialog:string; 
+    tittle?:string;
     dataDialog:{};
     disabled:boolean
 }
@@ -14,12 +15,17 @@ export interface User {
   email: string;
   group?: Group;
 }
+export interface Room{
+  id?: number | string;
+  name:string;
+  address:string;
+  description:string;
+}
 interface Role {
   id: number;
   name: string;
   description: string;
 }
-
 interface GroupWithRoles {
   id: number;
   name: string;

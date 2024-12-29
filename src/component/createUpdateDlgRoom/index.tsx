@@ -9,74 +9,50 @@ import InputReuseable from '@/component/atoms/input/input';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { UserDataProps, GroupProps, PropDialog } from '@/type';
-import { User } from '@/type';
-import { fetchGroup } from '@/service/group';
-import { handleUpdateUser, handleCreateUser } from '@/service/usersService';
+import { Room, PropDialog } from '@/type';
+import { createRoom, updateRoom } from '@/service/rooms';
 
 
 
 
 
-export  const mapUserToUserDataProps = (user: User): UserDataProps => {
-  return {
-    id: user.id, // Thêm ánh xạ id
-    email: user.email,
-    userName: user.username, // Chú ý viết đúng key "userName" thay vì "username"
-    phone: user.phone,
-    password: '', // Không truyền mật khẩu từ User
-    groupId: user.group?.id || '',
-  };
-};
-export default function CreateUpdateDialog({open, onClose, onConfirm, actionDialog, dataDialog, disabled}: PropDialog) {
-const defaultUserData:UserDataProps = {
-    id: '',
-    email: '',
-    userName:'',
-    phone:'',
-    password:'',
-    groupId: 2,
+
+export default function CreateUpdateDialogRoom({open, onClose, onConfirm, actionDialog, dataDialog, disabled, ...props}: PropDialog) {
+const defaultRoomData:Room = {
+    id:'',
+    name: '',
+    address:'',
+    description:'',
   } 
 
   const defaultValidInput = {
     id:true,
-    email: true,
-    userName: true,
-    phone: true,
-    password: true,
-    groupId: true,
+    name: true,
+    address: true,
+    description: true,
   }
 
-  const [userData, setUserData] = useState(defaultUserData)
-  const [group, setGroup ] = useState<GroupProps[]| []>([])
+  const [roomData, setRoomData] = useState(defaultRoomData)
   const [validInput, setValidInput] = useState(defaultValidInput)
 
-  const handleFetchGroup = async () =>{
-    let response = await fetchGroup()
-    if (response.data.EC === 0) {
-      setGroup(response.data.DT as GroupProps[]);
-      if (response.data.DT && response.data.DT.length > 0) {
-        let group = response.data.DT;
-        setUserData({...userData, groupId: group[0].id })
-      }
-    } else {
-      toast.error(response.data.EM)
-    }
-  }
 
-  const handleOnchangeInput = (value: string, name: keyof UserDataProps ) => {
-    let _userData = _.cloneDeep(userData);
-    _userData[name] = value;
-    setUserData(_userData);
+
+  const handleOnchangeInput = (value: string, name: keyof Room ) => {
+    let _roomData = _.cloneDeep(roomData);
+    _roomData[name] = value;
+    setRoomData(_roomData);
   };
+  // const handleOnchangeInput = ( ) => {
+  //   setRoomData(roomData);
+  // };
 
   const checkValidateInput = () => {
     setValidInput(defaultValidInput); // Reset trạng thái
-    let arr: (keyof UserDataProps)[] = ['email', 'userName', 'phone', 'password'];
+    let arr: (keyof Room)[] = ['name', 'address', 'description'];
   
     let _validInputs = _.cloneDeep(defaultValidInput);
     let check = arr.every((field) => {
-      if (!userData[field]) {
+      if (!roomData[field]) {
         _validInputs[field] = false;
         return false; // Nếu bất kỳ giá trị nào trống, `every` sẽ trả về false
       }
@@ -100,12 +76,14 @@ const defaultUserData:UserDataProps = {
   const handleCreate = async () =>{
     let check = checkValidateInput()
     if (check) {
-      let data = userData;
-      let res = await handleCreateUser(data.email, data.phone, data.userName, data.password, data.groupId)
+      let room = roomData;
+      // let res = await handleCreateUser(data.email, data.phone, data.userName, data.password, data.groupId)
+      let res = await createRoom({name: room.name, description: room.description, address:room.address} )
+      console.log(res)
       let validate = res.data
       if (validate.EC === 0) {
         toast.success(validate.EM)
-        setUserData(defaultUserData)
+        setRoomData(defaultRoomData)
         onConfirm()
         handleClose()
       } else {
@@ -115,12 +93,12 @@ const defaultUserData:UserDataProps = {
   }
 
   const handleUpdate = async () => {
-    let data = userData;
-    let res= await handleUpdateUser(data.id,data.userName, data.groupId)
+    let room = roomData;
+    let res= await updateRoom({id:room.id,name: room.name, description: room.description, address:room.address})
     let validate = res.data
       if (validate.EC === 0) {
         toast.success(validate.EM)
-        setUserData(defaultUserData)
+        setRoomData(defaultRoomData)
         onConfirm()
         handleClose()
       } else {
@@ -128,18 +106,10 @@ const defaultUserData:UserDataProps = {
       }
     }
 
-  useEffect(() => {
-    handleFetchGroup();
-  }, []);
 
   useEffect(() => {
-  if (dataDialog && 'id' in dataDialog) {
-    const mappedData = mapUserToUserDataProps(dataDialog as User); // Ép kiểu
-    setUserData(mappedData);
-    console.log('mapped data :', mappedData)
-  } else {
-    setUserData(defaultUserData); // Sử dụng dữ liệu mặc định nếu không hợp lệ
-  }
+    setRoomData(dataDialog as Room)
+
 }, [dataDialog]);
   let inputClassNameDisable = 'my-1 w-full text-sm text-gray-900 bg-gray-200 border-0 border-b-2 border-gray-300 rounded-none'
   let inputClassName =  'my-1 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 rounded-none'
@@ -147,25 +117,25 @@ const defaultUserData:UserDataProps = {
   return (
     <React.Fragment>
       <Dialog
+        {...props}
         open={open}
         onClose={handleClose}
         aria-describedby="alert-dialog-description"
         fullWidth={true}
       >
         <DialogTitle id="alert-dialog-title">
-          {actionDialog === 'CREATE' ? 'Create new user' : 'Update current uer'}
+          {actionDialog === 'CREATE' ? 'Create new room' : 'Update current room'}
         </DialogTitle>
         <Divider/>
         <DialogContent>
             <div className='grid grid-cols-2 gap-4'>
                 <div>
                     <InputReuseable
-                    label={'Email address'}
+                    label={'Name'}
                     variant='standard'
-                    value={userData.email}
+                    value={roomData.name}
                     disabled={disabled}
-                    type="email"
-                    onChange={(e) => handleOnchangeInput(e.target.value, "email")}
+                    onChange={(e) => handleOnchangeInput(e.target.value, "name")}
                     className={
                       disabled 
                         ? inputClassNameDisable
@@ -177,10 +147,10 @@ const defaultUserData:UserDataProps = {
                 </div>
                 <div>
                     <InputReuseable
-                    label={'User name'}
+                    label={'Address'}
                     variant='standard'
-                    value={userData.userName}
-                    onChange={(e) => handleOnchangeInput(e.target.value, "userName")}
+                    value={roomData.address}
+                    onChange={(e) => handleOnchangeInput(e.target.value, "address")}
                     className={
                       Object.values(validInput).some((value) => !value)
                         ? inputClassNameError
@@ -190,11 +160,11 @@ const defaultUserData:UserDataProps = {
                 </div>
                 <div>
                     <InputReuseable
-                    label={'Phone number'}
+                    label={'Description'}
                     variant='standard'
-                    value={userData.phone}
+                    value={roomData.description}
                     disabled={disabled}
-                    onChange={(e) => handleOnchangeInput(e.target.value, "phone")}
+                    onChange={(e) => handleOnchangeInput(e.target.value, "description")}
                     className={
                       disabled 
                         ? inputClassNameDisable
@@ -204,11 +174,11 @@ const defaultUserData:UserDataProps = {
                     }
                     />
                 </div>
-                <div>
+                {/* <div>
                     <InputReuseable
                     label={'Password'}
                     variant='standard'
-                    value={userData.password}
+                    value={roomData.password}
                     type="password"
                     disabled={disabled}
                     onChange={(e) => handleOnchangeInput(e.target.value, "password")}
@@ -220,36 +190,18 @@ const defaultUserData:UserDataProps = {
                         : inputClassName
                     }
                     />
-                </div>
+                </div> */}
             </div>
 
-            <form className="mt-4 w-full grid grid-cols-2 gap-4 mx-auto">
-                <div>
-                    <label htmlFor="group" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group</label>
-                    <select id="group" 
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      value={userData.groupId}
-                      onChange={(e) => handleOnchangeInput(e.target.value, "groupId")}
-                      >
-                    {group.length > 0 ? (
-                          group.map((item, index) => {
-                            return (
-                              <option key={index} value={item.id}>{item.name}</option>
-                            )
-                          }
-                        )
-                        ) : (
-                              <option value="">Loading groups...</option>
-                      )}
-                    </select>
-                </div>
-            </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={actionDialog === "CREATE" ? handleCreate : handleUpdate}>
             {actionDialog === "CREATE" ? "CREATE" : "SAVE"}
           </Button>
+           {/* <Button onClick={handleCreate }>
+           CREATE
+          </Button> */}
         </DialogActions>
       </Dialog>
     </React.Fragment>

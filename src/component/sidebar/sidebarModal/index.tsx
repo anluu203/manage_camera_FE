@@ -1,5 +1,5 @@
-import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
-import { createContext, useState, ReactNode } from "react";
+import { ChevronFirst, ChevronLast } from "lucide-react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import { useAuth } from "@/hooks/useAth";
 import { Account } from "@/type";
 // Kiểu dữ liệu cho Context
@@ -30,12 +30,12 @@ function SidebarLayout({
   let email = (user.account as Account)?.email;
 <h4 className="font-semibold">{userName}</h4>;
   return (
-    <aside className="h-screen ">
+    <aside className="h-screen inset-y-0 z-10">
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <button
             onClick={toggleSidebar}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+            className="hidden md:block p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
@@ -63,9 +63,29 @@ function SidebarLayout({
 export default function SidebarModal({ children }: SidebarProps) {
   const [expanded, setExpanded] = useState(true);
 
+  // Thêm logic tự động đóng sidebar khi màn hình ở mức medium
+  useEffect(() => {
+    const handleResize = () => {
+      const isMediumScreen = window.matchMedia("(max-width: 992px)").matches;
+      setExpanded(!isMediumScreen); // Đặt `expanded` thành false nếu màn hình nhỏ hơn `md`
+    };
+
+    // Lắng nghe sự kiện resize
+    window.addEventListener("resize", handleResize);
+
+    // Gọi ngay khi component mount để xử lý kích thước ban đầu
+    handleResize();
+
+    // Cleanup listener khi unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <SidebarContext.Provider value={{ expanded }}>
-      <SidebarLayout expanded={expanded} toggleSidebar={() => setExpanded((curr) => !curr)}>
+      <SidebarLayout
+        expanded={expanded}
+        toggleSidebar={() => setExpanded((curr) => !curr)}
+      >
         {children}
       </SidebarLayout>
     </SidebarContext.Provider>

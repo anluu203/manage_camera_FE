@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import { User, UserTableProps } from "@/type";
 import ButtonCustom from "../atoms/button/button";
 import { CirclePlus, Trash, UserPen } from "lucide-react";
-import { handleDeleteUser } from "@/service/usersService";
+import { handleDeleteUser } from "@/service/users";
 import DialogDelete from "../deleteDlg";
-import CreateUpdateDialog from "../createUpdateDlg";
+import CreateUpdateDialog from "../createUpdateDlgUser";
 
 
 const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPage, currentResults }) => {
@@ -133,6 +133,8 @@ const UserTable: React.FC<UserTableProps> = ({ listUsers, fetchUsers, currentPag
     </div>
     <div className="dialog-delete">
         <DialogDelete
+          tittle="Delete User"
+          description="Do you want to delete this user ?"
           open={openDialogDelete}
           onClose={handleCloseDialogDelete}
           onConfirm={handleConfirmDelete }

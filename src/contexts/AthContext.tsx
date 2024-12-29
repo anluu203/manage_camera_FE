@@ -1,7 +1,9 @@
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { getUserAccount } from "@/service/auth/getUserAccount";
 import { handleLogout } from "@/service/auth/loginLogout";
 import {Account} from "@/type"
+
+
 // Định nghĩa kiểu dữ liệu cho user
 interface User {
     isAuthenticated: boolean,
@@ -43,32 +45,36 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("jwt");
     await handleLogout()
   };
-  const fetchUser = async () =>{
-   let response = await getUserAccount()
-   let user = response.data;
-   if (user && user.EC === 0) {
-    let groupWithRoles = user.DT.groupWithRoles;
-    let email = user.DT.email;
-    let username = user.DT.username;
-    let token = user.DT.access_token;
-    let data = {
-      isAuthenticated: true,
-      token: token,
-      account: {groupWithRoles, email, username},
-      isLoading: false
-    };
-    setTimeout(() =>{
-      setUser(data)
-    },700)
-   } else{
-    setUser({...defaultValueUser, isLoading:false})
-   }
-  }
+  const fetchUser = useCallback(async () =>{
+    let response = await getUserAccount()
+    let user = response.data;
+    if (user && user.EC === 0) {
+     let groupWithRoles = user.DT.groupWithRoles;
+     let email = user.DT.email;
+     let username = user.DT.username;
+     let token = user.DT.access_token;
+     let data = {
+       isAuthenticated: true,
+       token: token,
+       account: {groupWithRoles, email, username},
+       isLoading: false
+     };
+     setTimeout(() =>{
+       setUser(data)
+     },700)
+    } else{
+     setUser({...defaultValueUser, isLoading:false})
+    }
+    // eslint-disable-next-line
+   },[])
+
   useEffect(() =>{
       fetchUser();
-      console.log('user in context :', user)
-  },[])
-
+  },[fetchUser])
+  
+  useEffect(() =>{
+    console.log('user in context :', user)
+},[user])
   return (
     <AuthContext.Provider value={{ user, loginContext, logout }}>
       {children}

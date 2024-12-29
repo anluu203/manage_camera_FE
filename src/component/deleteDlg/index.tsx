@@ -10,8 +10,10 @@ interface PropDialog{
     open: boolean;
     onClose: () => void;
     onConfirm?: () => void;
+    tittle:string;
+    description:string;
 }
-export default function DialogDelete({open, onClose, onConfirm}: PropDialog) {
+export default function DialogDelete({open, onClose, onConfirm, tittle, description}: PropDialog) {
 
 
 
@@ -25,11 +27,11 @@ export default function DialogDelete({open, onClose, onConfirm}: PropDialog) {
         fullWidth={true}
       >
         <DialogTitle id="alert-dialog-title">
-          {"Delete User"}
+          {tittle}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-                Do you want to delete this user ?
+                {description}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

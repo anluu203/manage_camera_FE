@@ -1,7 +1,7 @@
 import PaginationComponent from "@/component/pagination";
 import UserTable from "@/component/userTable";
 import { useEffect, useState, useCallback } from "react";
-import { handleFetchUsers } from "@/service/usersService";
+import { handleFetchUsers } from "@/service/users";
 import { User } from "@/type";
 
 const UsersPage = () => {
