@@ -29,7 +29,7 @@ export const Sidebar = () => {
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard"  to="dashboard"/>
         <SidebarItem icon={<ContactRound size={20} />} text="ListUsers" to="users"/>
         <SidebarItem icon={<BookCopy size={20} />} text="Rooms" to="rooms"/>
-        <SidebarItem icon={<Camera size={20} />} text="CameraCategory" to="cameras"/>
+        <SidebarItem icon={<Camera size={20} />} text="Cameras" to="cameras"/>
         <hr className="my-3" />
         <SidebarItem icon={<Settings size={20} />} text="Settings" to="settings"/>
         <SidebarItem icon={<LogOut size={20} />} text="Logout" to="" onClick={handleLogout} />

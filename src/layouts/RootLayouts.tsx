@@ -8,9 +8,9 @@ interface RootLayoutProps {
 function RootLayout({ children }:RootLayoutProps) {
   const {user} = useAuth();
     return (
-      <div className="flex gap-5">
+      <div className="flex">
         {user.isAuthenticated && <Sidebar/>}
-        <main className="  mx-auto py-4 ">{children}</main>
+        <main className=" md:px-5 flex justify-center py-4 w-full">{children}</main>
       </div>
     );
   }

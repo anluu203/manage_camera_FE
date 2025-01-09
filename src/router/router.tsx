@@ -6,10 +6,11 @@ import SignUpPage from "@/page/signup";
 import LoginPage from "@/page/login";
 import HomePage from "@/page/home";
 import ManageRoom from "@/page/rooms/listRooms";
-import EventChart from "@/component/chart/EventChart";
+import DashBoard from "@/page/dashboard";
 import UsersPage from "@/page/users";
 import PrivateRoute from "./privateRoute";
 import PublicRoute from "./publicRoute";
+import CameraPage from "@/page/camera";
 const AppRouter: React.FC = () => {
   return (
       <Routes>
@@ -19,7 +20,8 @@ const AppRouter: React.FC = () => {
             <Route path="/home" element={<PrivateRoute component={HomePage} />} />
             <Route path="/users" element={<PrivateRoute component={UsersPage} />} />
             <Route path="/rooms" element={<PrivateRoute component={ManageRoom} />} />
-            <Route path="/chart" element={<PrivateRoute component={EventChart} />} />
+            <Route path="/dashboard" element={<PrivateRoute component={DashBoard} />} />
+            <Route path="/cameras" element={<PrivateRoute component={CameraPage} />} />
       </Routes>
   );
 };

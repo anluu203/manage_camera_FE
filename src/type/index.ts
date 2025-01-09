@@ -21,6 +21,19 @@ export interface Room{
   address:string;
   description:string;
 }
+
+export type Camera = {
+  id?: number;
+  name: string;
+  ipAddress: string;
+  status: number;
+  description: string;
+  roomID: number;
+  room?: {
+      name: string;
+  };
+};
+
 interface Role {
   id: number;
   name: string;
